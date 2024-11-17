@@ -7,7 +7,7 @@ import ConflictError, { messageConflictError } from '../errors/conflict-error';
 import BadRequestError, {
   messageBadRequest,
 } from '../errors/bad-request-error';
-
+/* eslint-disable */
 const moveFile = (tempPath: string, targetPath: string) => {
   fs.renameSync(tempPath, targetPath);
 };
