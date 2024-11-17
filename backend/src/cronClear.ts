@@ -4,7 +4,7 @@ import path from "path";
 const tempDir = path.join(__dirname, "../src/public/temp");
 export const job = new CronJob(
   "0 0 * * * *", // cronTime
-  function job () {
+  function job() {
     fs.readdir(tempDir, (err, files) => {
       if (err) return console.error(err);
 
@@ -13,7 +13,7 @@ export const job = new CronJob(
         const { birthtimeMs } = fs.statSync(filePath);
         const now = Date.now();
 
-        if (now - birthtimeMs > 60 * 1000) {
+        if (now - birthtimeMs > 60 * 60 * 1000) {
           fs.unlinkSync(filePath);
         }
       });
