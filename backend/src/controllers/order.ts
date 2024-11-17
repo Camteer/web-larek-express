@@ -5,6 +5,7 @@ import BadRequestError, {
   messageBadRequest,
 } from '../errors/bad-request-error';
 import ServerError, { messageServerError } from '../errors/server-error';
+
 type TPayment = 'card' | 'online';
 
 export interface IOrder {
@@ -19,14 +20,14 @@ export interface IOrder {
 export const createOrders = async (
   req: Request<any, string, IOrder>,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => {
   try {
     const { total, items } = req.body;
     const orderId = faker.string.uuid();
     let sum = 0;
-    for await (let id of items) {
-      let product = await Product.findById(id);
+    for await (const id of items) {
+      const product = await Product.findById(id);
       if (!product) {
         return next(new BadRequestError(messageBadRequest.product));
       }
@@ -35,7 +36,7 @@ export const createOrders = async (
       }
       sum += product.price;
     }
-    if (total != sum) {
+    if (total !== sum) {
       return next(new BadRequestError(messageBadRequest.total));
     }
     return res.status(201).send({ id: orderId, total });

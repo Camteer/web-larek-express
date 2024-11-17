@@ -13,17 +13,18 @@ const moveFile = (tempPath: string, targetPath: string) => {
 };
 
 export const getProducts = (
-  req: Request<any, string, IProduct>,
+  _req: Request<any, string, IProduct>,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => {
   try {
     return Product.find({})
       .then((products) =>
+
         res.status(201).send({
           items: products,
           total: products.length,
-        })
+        }),
       )
       .catch((error) => {
         next(error);

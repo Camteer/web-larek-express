@@ -13,7 +13,7 @@ const fileType = [
 
 const storage = multer.diskStorage({
   destination: (_req, _file, cb) => {
-    cb(null, path.join(__dirname, '../public/' + temp));
+    cb(null, path.join(__dirname, '../public/', temp));
   },
   filename: (_req, file, cb) => {
     const uniqueSuffix = Date.now();
@@ -24,7 +24,7 @@ const storage = multer.diskStorage({
 const fileFilter = (
   _req: Request,
   file: Express.Multer.File,
-  cb: FileFilterCallback
+  cb: FileFilterCallback,
 ) => {
   if (fileType.includes(file.mimetype)) {
     cb(null, true);

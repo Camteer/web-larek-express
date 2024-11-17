@@ -7,7 +7,6 @@ import {
   updateProducts,
 } from '../controllers/products';
 
-
 import auth from '../middlewares/auth';
 
 const router = Router();

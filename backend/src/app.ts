@@ -8,7 +8,7 @@ import userRouter from './routes/user';
 import uploadRouter from './routes/upload';
 import { errorLogger, requestLogger } from './middlewares/logger';
 import { errors } from 'celebrate';
-import { errorHandler } from './middlewares/error-handler';
+import  errorHandler  from './middlewares/error-handler';
 import cookieParser from 'cookie-parser';
 import { dbAddress, port, server } from './config';
 import { job } from './cronClear';

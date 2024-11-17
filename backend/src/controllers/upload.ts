@@ -1,13 +1,13 @@
-import ServerError, { messageServerError } from '../errors/server-error';
-import { Request, Response, NextFunction } from 'express';
+import { Request, Response, NextFunction } from "express";
+import ServerError, { messageServerError } from "../errors/server-error";
 
-export const uploadFile = (req: Request, res: Response, next: NextFunction) => {
+export default (req: Request, res: Response, next: NextFunction) => {
   try {
     if (!req.file) {
-      return res.status(400).json({ message: 'Файл не был загружен' });
+      return res.status(400).json({ message: "Файл не был загружен" });
     }
 
-    res.status(200).json({
+    return res.status(200).json({
       fileName: `/images/${req.file.filename}`,
       originalName: req.file.originalname,
     });
