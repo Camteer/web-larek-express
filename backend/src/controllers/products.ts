@@ -41,7 +41,14 @@ export const createProducts = async (
   
   try {
 
-    const { title, description, category, price, image } = req.body;
+    const {
+      title, 
+      description, 
+      category, 
+      price, 
+      image,
+      } = req.body;
+
     if (image) {
       const tempPath = path.join(
         __dirname,
