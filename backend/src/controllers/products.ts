@@ -48,14 +48,14 @@ export const createProducts = async (
         '..',
         'public',
         'temp',
-        image.fileName.split('/')[2]
+        image.fileName.split('/')[2],
       );
       const targetPath = path.join(
         __dirname,
         '..',
         'public',
         'images',
-        image.fileName.split('/')[2]
+        image.fileName.split('/')[2],
       );
       moveFile(tempPath, targetPath);
     } else {
@@ -82,7 +82,7 @@ export const createProducts = async (
 export const updateProducts = async (
   req: Request<any, string, IProduct>,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => {
   try {
     const { productId } = req.params;
@@ -94,14 +94,14 @@ export const updateProducts = async (
         '..',
         'public',
         'temp',
-        updates.image.fileName.split('/')[2]
+        updates.image.fileName.split('/')[2],
       );
       const targetPath = path.join(
         __dirname,
         '..',
         'public',
         'images',
-        updates.image.fileName.split('/')[2]
+        updates.image.fileName.split('/')[2],
       );
       moveFile(tempPath, targetPath);
     }
@@ -115,7 +115,7 @@ export const updateProducts = async (
     }
     product.save();
 
-    res.status(200).json(product);
+    return res.status(200).json(product);
   } catch (error) {
     if (error instanceof Error && error.message.includes('E11000')) {
       return next(new ConflictError(messageConflictError.product));
@@ -127,7 +127,7 @@ export const updateProducts = async (
 export const deleteProducts = async (
   req: Request<any, string, IProduct>,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => {
   try {
     const { productId } = req.params;
@@ -141,13 +141,13 @@ export const deleteProducts = async (
       __dirname,
       '..',
       'public',
-      product.image.fileName
+      product.image.fileName,
     );
     if (fs.existsSync(filePath)) {
       fs.unlinkSync(filePath);
     }
 
-    res.status(200).json(product);
+    return res.status(200).json(product);
   } catch {
     return next(new ServerError(messageServerError.server));
   }
