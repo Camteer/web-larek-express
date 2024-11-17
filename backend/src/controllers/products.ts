@@ -20,7 +20,7 @@ export const getProducts = (
   try {
     return Product.find({})
       .then((products) =>
-          res.status(201).send({
+        res.status(201).send({
           items: products,
           total: products.length,
         }),
@@ -41,9 +41,7 @@ export const createProducts = async (
   
   try {
 
-    const { 
-      title, description, category, price, image 
-    } = req.body;
+    const { title, description, category, price, image } = req.body;
     
     if (image) {
       const tempPath = path.join(
