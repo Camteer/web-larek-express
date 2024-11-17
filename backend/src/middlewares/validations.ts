@@ -1,7 +1,7 @@
-import { celebrate, Joi, Segments } from "celebrate";
-import { IProduct } from "../models/products";
-import { IOrder } from "../controllers/order";
-import { IUser } from "../models/users";
+import { celebrate, Joi, Segments } from 'celebrate';
+import { IProduct } from '../models/products';
+import { IOrder } from '../controllers/order';
+import { IUser } from '../models/users';
 
 const productSchemaFValidation = Joi.object<IProduct>({
   title: Joi.string().min(2).max(30).required(),
@@ -15,7 +15,7 @@ const productSchemaFValidation = Joi.object<IProduct>({
 });
 
 const orderSchemaValidation = Joi.object<IOrder>({
-  payment: Joi.equal("card", "online").required(),
+  payment: Joi.equal('card', 'online').required(),
   email: Joi.string().email().required(),
   phone: Joi.string().required(),
   address: Joi.string().required(),

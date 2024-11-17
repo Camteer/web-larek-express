@@ -1,6 +1,6 @@
 export enum messageNotFoundError {
-  page = "Page Not Found",
-  user = "User Not Found",
+  page = 'Page Not Found',
+  user = 'User Not Found',
 }
 
 class NotFound extends Error {

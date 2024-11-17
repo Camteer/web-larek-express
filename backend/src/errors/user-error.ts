@@ -1,8 +1,8 @@
 export enum messageBadUserRequest {
-  auth = "Incorrect Email Or Password",
-  token = "No Token",
-  invalidToken = "Invalid Token",
-  noAuth = "Authentication Error",
+  auth = 'Incorrect Email Or Password',
+  token = 'No Token',
+  invalidToken = 'Invalid Token',
+  noAuth = 'Authentication Error',
 }
 
 class BadUserRequestError extends Error {

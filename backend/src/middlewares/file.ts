@@ -1,19 +1,19 @@
-import multer, { FileFilterCallback } from "multer";
-import path from "path";
-import { Request } from "express";
-import { temp } from "../config";
+import multer, { FileFilterCallback } from 'multer';
+import path from 'path';
+import { Request } from 'express';
+import { temp } from '../config';
 
 const fileType = [
-  "image/png",
-  "image/jpg",
-  "image/jpeg",
-  "image/gif",
-  "image/svg+xml",
+  'image/png',
+  'image/jpg',
+  'image/jpeg',
+  'image/gif',
+  'image/svg+xml',
 ];
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, path.join(__dirname, "../public/" + temp));
+    cb(null, path.join(__dirname, '../public/' + temp));
   },
   filename: (_req, file, cb) => {
     const uniqueSuffix = Date.now();

@@ -1,24 +1,24 @@
-import { Request, Response, NextFunction } from "express";
+import { Request, Response, NextFunction } from 'express';
 import {
   accessTokenSecret,
   accessTokenExpiry,
   refreshTokenSecret,
   refreshTokenExpiry,
-} from "../config";
-import bcrypt from "bcrypt";
-import jwt from "jsonwebtoken";
-import ms from "ms";
+} from '../config';
+import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
+import ms from 'ms';
 
-import User from "../models/users";
+import User from '../models/users';
 import BadUserRequestError, {
   messageBadUserRequest,
-} from "../errors/user-error";
-import ServerError, { messageServerError } from "../errors/server-error";
-import ConflictError, { messageConflictError } from "../errors/conflict-error";
-import NotFound, { messageNotFoundError } from "../errors/not-found-error";
+} from '../errors/user-error';
+import ServerError, { messageServerError } from '../errors/server-error';
+import ConflictError, { messageConflictError } from '../errors/conflict-error';
+import NotFound, { messageNotFoundError } from '../errors/not-found-error';
 import BadRequestError, {
   messageBadRequest,
-} from "../errors/bad-request-error";
+} from '../errors/bad-request-error';
 
 const generateTokens = (userId: string) => {
   const accessToken = jwt.sign({ _id: userId }, accessTokenSecret, {
@@ -45,12 +45,12 @@ export const register = async (
     user.tokens.push({ token: refreshToken });
     await user.save();
 
-    res.cookie("refreshToken", refreshToken, {
+    res.cookie('refreshToken', refreshToken, {
       httpOnly: true,
-      sameSite: "lax",
+      sameSite: 'lax',
       secure: false,
       maxAge: ms(refreshTokenExpiry),
-      path: "/",
+      path: '/',
     });
 
     res.status(201).send({
@@ -59,7 +59,7 @@ export const register = async (
       accessToken,
     });
   } catch (error) {
-    if (error instanceof Error && error.message.includes("E11000")) {
+    if (error instanceof Error && error.message.includes('E11000')) {
       return next(new ConflictError(messageConflictError.mail));
     }
     return next(new ServerError(messageServerError.server));
@@ -73,7 +73,7 @@ export const login = async (
 ) => {
   try {
     const { email, password } = req.body;
-    const user = await User.findOne({ email }).select("+password");
+    const user = await User.findOne({ email }).select('+password');
     if (!user || !(await bcrypt.compare(password, user.password))) {
       return next(new BadUserRequestError(messageBadUserRequest.auth));
     }
@@ -82,12 +82,12 @@ export const login = async (
     user.tokens.push({ token: refreshToken });
     await user.save();
 
-    res.cookie("refreshToken", refreshToken, {
+    res.cookie('refreshToken', refreshToken, {
       httpOnly: true,
-      sameSite: "lax",
+      sameSite: 'lax',
       secure: false,
       maxAge: ms(refreshTokenExpiry),
-      path: "/",
+      path: '/',
     });
 
     res.send({
@@ -116,7 +116,7 @@ export const refreshAccessToken = async (
       _id: string;
     };
 
-    const user = await User.findById(payload._id).select("+tokens");
+    const user = await User.findById(payload._id).select('+tokens');
 
     if (!user || !user.tokens.some((t) => t.token === refreshToken)) {
       return next(new BadUserRequestError(messageBadUserRequest.invalidToken));
@@ -131,12 +131,12 @@ export const refreshAccessToken = async (
     user.tokens.push({ token: newRefreshToken });
     await user.save();
 
-    res.cookie("refreshToken", newRefreshToken, {
+    res.cookie('refreshToken', newRefreshToken, {
       httpOnly: true,
-      sameSite: "lax",
+      sameSite: 'lax',
       secure: false,
       maxAge: ms(refreshTokenExpiry),
-      path: "/",
+      path: '/',
     });
 
     res.send({
@@ -156,20 +156,19 @@ export const logout = async (
 ) => {
   try {
     const refreshToken = req.cookies.refreshToken;
-    console.log(req);
     if (!refreshToken) {
       return next(new BadRequestError(messageBadRequest.token));
     }
     const payload = jwt.verify(refreshToken, refreshTokenSecret) as {
       _id: string;
     };
-    const user = await User.findById(payload._id).select("+tokens");
+    const user = await User.findById(payload._id).select('+tokens');
     if (!user) return next(new NotFound(messageNotFoundError.user));
 
     user.tokens = user.tokens.filter((t) => t.token !== refreshToken);
     await user.save();
 
-    res.clearCookie("refreshToken");
+    res.clearCookie('refreshToken');
     res.send({ success: true });
   } catch (err) {
     return next(new ServerError(messageServerError.server));
@@ -184,7 +183,7 @@ export const getCurrentUser = async (
   try {
     const authHeader = req.headers.authorization;
 
-    const token = authHeader && authHeader.split(" ")[1];
+    const token = authHeader && authHeader.split(' ')[1];
     if (!token) {
       return next(new BadUserRequestError(messageBadUserRequest.token));
     }

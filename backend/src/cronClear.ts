@@ -1,9 +1,9 @@
-import { CronJob } from "cron";
-import fs from "fs";
-import path from "path";
-const tempDir = path.join(__dirname, "../src/public/temp");
+import { CronJob } from 'cron';
+import fs from 'fs';
+import path from 'path';
+const tempDir = path.join(__dirname, '../src/public/temp');
 export const job = new CronJob(
-  "0 0 * * * *", // cronTime
+  '0 0 * * * *', // cronTime
   function job() {
     fs.readdir(tempDir, (err, files) => {
       if (err) return console.error(err);
@@ -21,5 +21,5 @@ export const job = new CronJob(
   }, // onTick
   null, // onComplete
   true, // start
-  "America/Los_Angeles" // timeZone
+  'America/Los_Angeles' // timeZone
 );

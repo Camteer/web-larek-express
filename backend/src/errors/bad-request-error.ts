@@ -1,9 +1,9 @@
 export enum messageBadRequest {
-  data = "Incorrect data",
-  product = "Product Not Found",
-  price = "Incorrect Price",
-  total = "Incorrect Total Price",
-  token = "No Token",
+  data = 'Incorrect data',
+  product = 'Product Not Found',
+  price = 'Incorrect Price',
+  total = 'Incorrect Total Price',
+  token = 'No Token',
 }
 
 class BadRequestError extends Error {

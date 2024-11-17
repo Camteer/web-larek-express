@@ -1,11 +1,11 @@
-import { Request, Response, NextFunction } from "express";
-import { faker } from "@faker-js/faker";
-import Product from "../models/products";
+import { Request, Response, NextFunction } from 'express';
+import { faker } from '@faker-js/faker';
+import Product from '../models/products';
 import BadRequestError, {
   messageBadRequest,
-} from "../errors/bad-request-error";
-import ServerError, { messageServerError } from "../errors/server-error";
-type TPayment = "card" | "online";
+} from '../errors/bad-request-error';
+import ServerError, { messageServerError } from '../errors/server-error';
+type TPayment = 'card' | 'online';
 
 export interface IOrder {
   phone: string;

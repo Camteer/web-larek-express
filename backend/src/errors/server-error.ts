@@ -1,5 +1,5 @@
 export enum messageServerError {
-  server = "Server Error",
+  server = 'Server Error',
 }
 
 class ServerError extends Error {

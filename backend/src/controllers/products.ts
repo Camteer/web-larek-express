@@ -1,12 +1,12 @@
-import fs from "fs";
-import path from "path";
-import { Request, Response, NextFunction } from "express";
-import Product, { IProduct } from "../models/products";
-import ServerError, { messageServerError } from "../errors/server-error";
-import ConflictError, { messageConflictError } from "../errors/conflict-error";
+import fs from 'fs';
+import path from 'path';
+import { Request, Response, NextFunction } from 'express';
+import Product, { IProduct } from '../models/products';
+import ServerError, { messageServerError } from '../errors/server-error';
+import ConflictError, { messageConflictError } from '../errors/conflict-error';
 import BadRequestError, {
   messageBadRequest,
-} from "../errors/bad-request-error";
+} from '../errors/bad-request-error';
 
 const moveFile = (tempPath: string, targetPath: string) => {
   fs.renameSync(tempPath, targetPath);
@@ -44,17 +44,17 @@ export const createProducts = async (
     if (image) {
       const tempPath = path.join(
         __dirname,
-        "..",
-        "public",
-        "temp",
-        image.fileName.split("/")[2]
+        '..',
+        'public',
+        'temp',
+        image.fileName.split('/')[2]
       );
       const targetPath = path.join(
         __dirname,
-        "..",
-        "public",
-        "images",
-        image.fileName.split("/")[2]
+        '..',
+        'public',
+        'images',
+        image.fileName.split('/')[2]
       );
       moveFile(tempPath, targetPath);
     } else {
@@ -71,7 +71,7 @@ export const createProducts = async (
     newProduct.save();
     res.status(201).json(newProduct);
   } catch (error) {
-    if (error instanceof Error && error.message.includes("E11000")) {
+    if (error instanceof Error && error.message.includes('E11000')) {
       return next(new ConflictError(messageConflictError.product));
     }
     return next(new ServerError(messageServerError.server));
@@ -90,17 +90,17 @@ export const updateProducts = async (
     if (updates.image) {
       const tempPath = path.join(
         __dirname,
-        "..",
-        "public",
-        "temp",
-        updates.image.fileName.split("/")[2]
+        '..',
+        'public',
+        'temp',
+        updates.image.fileName.split('/')[2]
       );
       const targetPath = path.join(
         __dirname,
-        "..",
-        "public",
-        "images",
-        updates.image.fileName.split("/")[2]
+        '..',
+        'public',
+        'images',
+        updates.image.fileName.split('/')[2]
       );
       moveFile(tempPath, targetPath);
     }
@@ -116,7 +116,7 @@ export const updateProducts = async (
 
     res.status(200).json(product);
   } catch (error) {
-    if (error instanceof Error && error.message.includes("E11000")) {
+    if (error instanceof Error && error.message.includes('E11000')) {
       return next(new ConflictError(messageConflictError.product));
     }
     return next(new ServerError(messageServerError.server));
@@ -138,8 +138,8 @@ export const deleteProducts = async (
 
     const filePath = path.join(
       __dirname,
-      "..",
-      "public",
+      '..',
+      'public',
       product.image.fileName
     );
     if (fs.existsSync(filePath)) {
