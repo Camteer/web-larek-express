@@ -3,6 +3,14 @@ import path from "path";
 import { Request } from "express";
 import { temp } from "../config";
 
+const fileType = [
+  "image/png",
+  "image/jpg",
+  "image/jpeg",
+  "image/gif",
+  "image/svg+xml",
+];
+
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(null, path.join(__dirname, "../public/" + temp));
@@ -18,7 +26,7 @@ const fileFilter = (
   file: Express.Multer.File,
   cb: FileFilterCallback
 ) => {
-  if (file.mimetype === "image/png" || file.mimetype === "image/jpeg") {
+  if (fileType.includes(file.mimetype)) {
     cb(null, true);
   } else {
     cb(null, false);

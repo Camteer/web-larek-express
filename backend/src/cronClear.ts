@@ -4,8 +4,7 @@ import path from "path";
 const tempDir = path.join(__dirname, "../src/public/temp");
 export const job = new CronJob(
   "0 0 * * * *", // cronTime
-  function () {
-    console.log("Cleaning");
+  function job () {
     fs.readdir(tempDir, (err, files) => {
       if (err) return console.error(err);
 
