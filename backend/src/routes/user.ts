@@ -1,3 +1,4 @@
+import { Router } from 'express';
 import { userRouteValidator } from '../middlewares/validations';
 import {
   getCurrentUser,
@@ -6,7 +7,6 @@ import {
   refreshAccessToken,
   register,
 } from '../controllers/auth';
-import { Router } from 'express';
 
 const router = Router();
 

@@ -12,7 +12,7 @@ const fileType = [
 ];
 
 const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
+  destination: (_req, _file, cb) => {
     cb(null, path.join(__dirname, '../public/' + temp));
   },
   filename: (_req, file, cb) => {
@@ -22,7 +22,7 @@ const storage = multer.diskStorage({
 });
 
 const fileFilter = (
-  req: Request,
+  _req: Request,
   file: Express.Multer.File,
   cb: FileFilterCallback
 ) => {

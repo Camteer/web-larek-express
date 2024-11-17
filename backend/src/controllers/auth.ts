@@ -1,14 +1,13 @@
 import { Request, Response, NextFunction } from 'express';
+import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
+import ms from 'ms';
 import {
   accessTokenSecret,
   accessTokenExpiry,
   refreshTokenSecret,
   refreshTokenExpiry,
-} from '../config';
-import bcrypt from 'bcrypt';
-import jwt from 'jsonwebtoken';
-import ms from 'ms';
-
+} from "../config";
 import User from '../models/users';
 import BadUserRequestError, {
   messageBadUserRequest,
@@ -33,7 +32,7 @@ const generateTokens = (userId: string) => {
 export const register = async (
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => {
   try {
     const { email, password, name } = req.body;
@@ -53,7 +52,7 @@ export const register = async (
       path: '/',
     });
 
-    res.status(201).send({
+    return res.status(201).send({
       user: { email, name },
       success: true,
       accessToken,
