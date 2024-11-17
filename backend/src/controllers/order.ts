@@ -26,6 +26,7 @@ export const createOrders = async (
     const { total, items } = req.body;
     const orderId = faker.string.uuid();
     let sum = 0;
+    /* eslint-disable-next-line */
     for await (const id of items) {
       const product = await Product.findById(id);
       if (!product) {

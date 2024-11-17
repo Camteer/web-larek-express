@@ -154,7 +154,7 @@ export const logout = async (
   next: NextFunction,
 ) => {
   try {
-    const { refreshToken }= req.cookies.refreshToken;
+    const { refreshToken } = req.cookies.refreshToken;
     if (!refreshToken) {
       return next(new BadRequestError(messageBadRequest.token));
     }

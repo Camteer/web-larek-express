@@ -20,13 +20,11 @@ export const getProducts = (
   try {
     return Product.find({})
       .then((products) =>
-
         res.status(201).send({
           items: products,
           total: products.length,
         }),
-      )
-      .catch((error) => {
+      ).catch((error) => {
         next(error);
       });
   } catch {
@@ -37,12 +35,13 @@ export const getProducts = (
 export const createProducts = async (
   req: Request<any, string, IProduct>,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => {
   try {
     const { title, description, category, price, image } = req.body;
 
     if (image) {
+      
       const tempPath = path.join(
         __dirname,
         '..',
@@ -70,7 +69,7 @@ export const createProducts = async (
       image,
     });
     newProduct.save();
-    res.status(201).json(newProduct);
+    return res.status(201).json(newProduct);
   } catch (error) {
     if (error instanceof Error && error.message.includes('E11000')) {
       return next(new ConflictError(messageConflictError.product));
