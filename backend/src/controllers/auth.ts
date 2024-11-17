@@ -7,7 +7,7 @@ import {
   accessTokenExpiry,
   refreshTokenSecret,
   refreshTokenExpiry,
-} from "../config";
+} from '../config';
 import User from '../models/users';
 import BadUserRequestError, {
   messageBadUserRequest,
@@ -68,7 +68,7 @@ export const register = async (
 export const login = async (
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => {
   try {
     const { email, password } = req.body;
@@ -89,7 +89,7 @@ export const login = async (
       path: '/',
     });
 
-    res.send({
+    return res.send({
       user: { email: user.email, name: user.name },
       success: true,
       accessToken,
@@ -102,10 +102,10 @@ export const login = async (
 export const refreshAccessToken = async (
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => {
   try {
-    const refreshToken = req.cookies.refreshToken;
+    const {refreshToken} = req.cookies.refreshToken;
 
     if (!refreshToken) {
       return next(new BadUserRequestError(messageBadUserRequest.token));
@@ -122,7 +122,7 @@ export const refreshAccessToken = async (
     }
 
     const { accessToken, refreshToken: newRefreshToken } = generateTokens(
-      String(user._id)
+      String(user._id),
     );
 
     user.tokens = user.tokens.filter((t) => t.token !== refreshToken);
@@ -138,7 +138,7 @@ export const refreshAccessToken = async (
       path: '/',
     });
 
-    res.send({
+    return res.send({
       user: { email: user.email, name: user.name },
       success: true,
       accessToken,
@@ -151,7 +151,7 @@ export const refreshAccessToken = async (
 export const logout = async (
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => {
   try {
     const refreshToken = req.cookies.refreshToken;
@@ -168,7 +168,7 @@ export const logout = async (
     await user.save();
 
     res.clearCookie('refreshToken');
-    res.send({ success: true });
+    return res.send({ success: true });
   } catch (err) {
     return next(new ServerError(messageServerError.server));
   }
@@ -177,7 +177,7 @@ export const logout = async (
 export const getCurrentUser = async (
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => {
   try {
     const authHeader = req.headers.authorization;
@@ -192,7 +192,7 @@ export const getCurrentUser = async (
     if (!user) {
       return next(new NotFound(messageNotFoundError.user));
     }
-    res.send({
+    return res.send({
       user: { email: user.email, name: user.name },
       success: true,
     });
