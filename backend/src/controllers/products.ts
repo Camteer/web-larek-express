@@ -38,10 +38,9 @@ export const createProducts = async (
   next: NextFunction,
 ) => {
   try {
+    
     const { title, description, category, price, image } = req.body;
-
     if (image) {
-      
       const tempPath = path.join(
         __dirname,
         '..',

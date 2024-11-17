@@ -23,7 +23,7 @@ const storage = multer.diskStorage({
 
 const fileFilter = (
   _req: Request,
-  file: Express.Multer.File,
+  file: any,
   cb: FileFilterCallback,
 ) => {
   if (fileType.includes(file.mimetype)) {
