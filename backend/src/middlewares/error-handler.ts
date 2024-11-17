@@ -1,10 +1,10 @@
 import { Request, Response, NextFunction } from 'express';
 
-export default function (
+export default function error(
   err: any,
   _req: Request,
   res: Response,
-  _next: NextFunction
+  _next: NextFunction,
 ) {
   res.status(err.statusCode).send({ message: err.message });
 }
