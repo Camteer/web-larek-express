@@ -26,7 +26,7 @@ export const createOrders = async (
     const { total, items } = req.body;
     const orderId = faker.string.uuid();
     let sum = 0;
-    /* eslint-disable-next-line */
+    /* eslint-disable */
     for await (const id of items) {
       const product = await Product.findById(id);
       if (!product) {
@@ -37,10 +37,10 @@ export const createOrders = async (
       }
       sum += product.price;
     }
-    if (total !== sum) {
+    if (total != sum) {
       return next(new BadRequestError(messageBadRequest.total));
     }
-    return res.status(201).send({ id: orderId, total });
+    return res.status(200).send({ id: orderId, total });
   } catch (err) {
     return next(new ServerError(messageServerError.server));
   }

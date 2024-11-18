@@ -20,7 +20,7 @@ export const getProducts = (
   try {
     return Product.find({})
       .then((products) =>
-        res.status(201).send({
+        res.status(200).send({
           items: products,
           total: products.length,
         }),
