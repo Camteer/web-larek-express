@@ -7,6 +7,7 @@ import ConflictError, { messageConflictError } from '../errors/conflict-error';
 import BadRequestError, {
   messageBadRequest,
 } from '../errors/bad-request-error';
+import NotFound, { messageNotFoundError } from '../errors/not-found-error';
 /* eslint-disable */
 const moveFile = (tempPath: string, targetPath: string) => {
   fs.renameSync(tempPath, targetPath);
@@ -15,48 +16,42 @@ const moveFile = (tempPath: string, targetPath: string) => {
 export const getProducts = (
   _req: Request<any, string, IProduct>,
   res: Response,
-  next: NextFunction,
+  next: NextFunction
 ) => {
-  try {
-    return Product.find({})
-      .then((products) =>
-        res.status(200).send({
-          items: products,
-          total: products.length,
-        }),
-      )
-      .catch((error) => {
-        next(error);
-      });
-  } catch {
-    return next(new ServerError(messageServerError.server));
-  }
+  return Product.find({})
+    .then((products) =>
+      res.status(200).send({
+        items: products,
+        total: products.length,
+      })
+    )
+    .catch(() => {
+      return next(new ServerError(messageServerError.server));
+    });
 };
 
 export const createProducts = async (
   req: Request<any, string, IProduct>,
   res: Response,
-  next: NextFunction,
+  next: NextFunction
 ) => {
-  
   try {
-
     const { title, description, category, price, image } = req.body;
-    
+
     if (image) {
       const tempPath = path.join(
         __dirname,
         '..',
         'public',
         'temp',
-        image.fileName.split('/')[2],
+        image.fileName.split('/')[2]
       );
       const targetPath = path.join(
         __dirname,
         '..',
         'public',
         'images',
-        image.fileName.split('/')[2],
+        image.fileName.split('/')[2]
       );
       moveFile(tempPath, targetPath);
     } else {
@@ -70,8 +65,8 @@ export const createProducts = async (
       price,
       image,
     });
-    newProduct.save();
-    return res.status(201).json(newProduct);
+    await newProduct.save();
+    return res.status(200).json(newProduct);
   } catch (error) {
     if (error instanceof Error && error.message.includes('E11000')) {
       return next(new ConflictError(messageConflictError.product));
@@ -83,7 +78,7 @@ export const createProducts = async (
 export const updateProducts = async (
   req: Request<any, string, IProduct>,
   res: Response,
-  next: NextFunction,
+  next: NextFunction
 ) => {
   try {
     const { productId } = req.params;
@@ -95,14 +90,14 @@ export const updateProducts = async (
         '..',
         'public',
         'temp',
-        updates.image.fileName.split('/')[2],
+        updates.image.fileName.split('/')[2]
       );
       const targetPath = path.join(
         __dirname,
         '..',
         'public',
         'images',
-        updates.image.fileName.split('/')[2],
+        updates.image.fileName.split('/')[2]
       );
       moveFile(tempPath, targetPath);
     }
@@ -128,7 +123,7 @@ export const updateProducts = async (
 export const deleteProducts = async (
   req: Request<any, string, IProduct>,
   res: Response,
-  next: NextFunction,
+  next: NextFunction
 ) => {
   try {
     const { productId } = req.params;
@@ -142,14 +137,17 @@ export const deleteProducts = async (
       __dirname,
       '..',
       'public',
-      product.image.fileName,
+      product.image.fileName
     );
     if (fs.existsSync(filePath)) {
       fs.unlinkSync(filePath);
     }
 
     return res.status(200).json(product);
-  } catch {
+  } catch (error) {
+    if (error instanceof Error && error.message.includes('CastError')) {
+      return next(new NotFound(messageNotFoundError.page));
+    }
     return next(new ServerError(messageServerError.server));
   }
 };
