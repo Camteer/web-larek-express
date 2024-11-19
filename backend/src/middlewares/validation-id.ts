@@ -1,10 +1,10 @@
-import NotFound, { messageNotFoundError } from '../errors/not-found-error';
-import { Request, Response, NextFunction } from 'express';
-import mongoose from 'mongoose';
+import { Request, Response, NextFunction } from "express";
+import mongoose from "mongoose";
+import NotFound, { messageNotFoundError } from "../errors/not-found-error";
 
 export default function validateId(
   req: Request,
-  res: Response,
+  _res: Response,
   next: NextFunction,
 ) {
   const { productId } = req.params;

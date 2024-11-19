@@ -63,7 +63,7 @@ export const register = async (
         return next(new ConflictError(messageConflictError.mail));
       }
       if (error.message.includes('ValidationError')) {
-        return next(new BadRequestError(messageBadRequest.data))
+        return next(new BadRequestError(messageBadRequest.data));
       }
     }
     return next(new ServerError(messageServerError.server));
@@ -127,7 +127,7 @@ export const refreshAccessToken = async (
     }
 
     const { accessToken, refreshToken: newRefreshToken } = generateTokens(
-      String(user._id)
+      String(user._id),
     );
 
     user.tokens = user.tokens.filter((t) => t.token !== refreshToken);
