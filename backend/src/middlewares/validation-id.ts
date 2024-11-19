@@ -13,5 +13,5 @@ export default function validateId(
     return next(new NotFound(messageNotFoundError.page));
   }
 
-  next();
+  return next();
 }
