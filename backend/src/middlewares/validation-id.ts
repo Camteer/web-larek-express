@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import mongoose from 'mongoose';
-import NotFound, { messageNotFoundError } from '../errors/not-found-error';
+import BadRequestError, { messageBadRequest } from '../errors/bad-request-error';
 
 export default function validateId(
   req: Request,
@@ -10,7 +10,7 @@ export default function validateId(
   const { productId } = req.params;
 
   if (!mongoose.Types.ObjectId.isValid(productId)) {
-    return next(new NotFound(messageNotFoundError.page));
+    return next(new BadRequestError(messageBadRequest.product));
   }
 
   return next();

@@ -9,8 +9,8 @@ import {
   refreshTokenExpiry,
 } from '../config';
 import User from '../models/users';
-import BadUserRequestError, {
-  messageBadUserRequest,
+import Unauthorized, {
+  messageUnauthorized,
 } from '../errors/user-error';
 import ServerError, { messageServerError } from '../errors/server-error';
 import ConflictError, { messageConflictError } from '../errors/conflict-error';
@@ -79,7 +79,7 @@ export const login = async (
     const { email, password } = req.body;
     const user = await User.findOne({ email }).select('+password');
     if (!user || !(await bcrypt.compare(password, user.password))) {
-      return next(new BadUserRequestError(messageBadUserRequest.auth));
+      return next(new Unauthorized(messageUnauthorized.auth));
     }
 
     const { accessToken, refreshToken } = generateTokens(String(user._id));
@@ -113,7 +113,7 @@ export const refreshAccessToken = async (
     const { refreshToken } = req.cookies.refreshToken;
 
     if (!refreshToken) {
-      return next(new BadUserRequestError(messageBadUserRequest.token));
+      return next(new Unauthorized(messageUnauthorized.token));
     }
 
     const payload = jwt.verify(refreshToken, refreshTokenSecret) as {
@@ -123,7 +123,7 @@ export const refreshAccessToken = async (
     const user = await User.findById(payload._id).select('+tokens');
 
     if (!user || !user.tokens.some((t) => t.token === refreshToken)) {
-      return next(new BadUserRequestError(messageBadUserRequest.invalidToken));
+      return next(new Unauthorized(messageUnauthorized.invalidToken));
     }
 
     const { accessToken, refreshToken: newRefreshToken } = generateTokens(
@@ -189,7 +189,7 @@ export const getCurrentUser = async (
 
     const token = authHeader && authHeader.split(' ')[1];
     if (!token) {
-      return next(new BadUserRequestError(messageBadUserRequest.token));
+      return next(new Unauthorized(messageUnauthorized.token));
     }
 
     const payload = jwt.verify(token, accessTokenSecret) as { _id: string };

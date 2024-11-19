@@ -5,6 +5,7 @@ import BadRequestError, {
   messageBadRequest,
 } from '../errors/bad-request-error';
 import ServerError, { messageServerError } from '../errors/server-error';
+import NotFound, { messageNotFoundError } from '../errors/not-found-error';
 
 type TPayment = 'card' | 'online';
 
@@ -30,7 +31,7 @@ export const createOrders = async (
     for await (const id of items) {
       const product = await Product.findById(id);
       if (!product) {
-        return next(new BadRequestError(messageBadRequest.product));
+        return next(new NotFound(messageNotFoundError.page));
       }
       if (product.price === null) {
         return next(new BadRequestError(messageBadRequest.price));

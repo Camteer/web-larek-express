@@ -1,11 +1,11 @@
-export enum messageBadUserRequest {
-  auth = 'Incorrect Email Or Password',
-  token = 'No Token',
-  invalidToken = 'Invalid Token',
-  noAuth = 'Authentication Error',
+export enum messageUnauthorized {
+  auth = "Incorrect Email Or Password",
+  token = "No Token",
+  invalidToken = "Invalid Token",
+  noAuth = "Authentication Error",
 }
 
-class BadUserRequestError extends Error {
+class Unauthorized extends Error {
   public statusCode: number;
 
   constructor(message: string) {
@@ -14,4 +14,4 @@ class BadUserRequestError extends Error {
   }
 }
 
-export default BadUserRequestError;
+export default Unauthorized;

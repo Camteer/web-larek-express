@@ -33,7 +33,7 @@ export const getProducts = (
 export const createProducts = async (
   req: Request<any, string, IProduct>,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => {
   try {
     const { title, description, category, price, image } = req.body;
@@ -78,7 +78,7 @@ export const createProducts = async (
 export const updateProducts = async (
   req: Request<any, string, IProduct>,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => {
   try {
     const { productId } = req.params;
@@ -104,17 +104,24 @@ export const updateProducts = async (
 
     const product = await Product.findByIdAndUpdate(productId, updates, {
       new: true,
+      runValidators: true,
     });
 
     if (!product) {
-      return next(new BadRequestError(messageBadRequest.product));
+      return next(new NotFound(messageNotFoundError.page));
     }
-    product.save();
+    await product.save();
 
     return res.status(200).json(product);
   } catch (error) {
-    if (error instanceof Error && error.message.includes('E11000')) {
-      return next(new ConflictError(messageConflictError.product));
+    if (error instanceof Error) {
+      if (error.message.includes('E11000')) {
+        return next(new ConflictError(messageConflictError.product));
+      } else if (error.message.includes("ValidationError")) {
+        return next(new BadRequestError(messageBadRequest.data));
+      } else if (error.message.includes("CastError")) {
+        return next(new BadRequestError(messageBadRequest.product));
+      }
     }
     return next(new ServerError(messageServerError.server));
   }
@@ -123,14 +130,14 @@ export const updateProducts = async (
 export const deleteProducts = async (
   req: Request<any, string, IProduct>,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => {
   try {
     const { productId } = req.params;
     const product = await Product.findByIdAndDelete(productId);
 
     if (!product) {
-      return next(new BadRequestError(messageBadRequest.product));
+      return next(new NotFound(messageNotFoundError.page));
     }
 
     const filePath = path.join(
@@ -146,7 +153,7 @@ export const deleteProducts = async (
     return res.status(200).json(product);
   } catch (error) {
     if (error instanceof Error && error.message.includes('CastError')) {
-      return next(new NotFound(messageNotFoundError.page));
+      return next(new BadRequestError(messageBadRequest.product));
     }
     return next(new ServerError(messageServerError.server));
   }
