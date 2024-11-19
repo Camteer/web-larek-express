@@ -1,6 +1,6 @@
-import { Request, Response, NextFunction } from "express";
-import mongoose from "mongoose";
-import NotFound, { messageNotFoundError } from "../errors/not-found-error";
+import { Request, Response, NextFunction } from 'express';
+import mongoose from 'mongoose';
+import NotFound, { messageNotFoundError } from '../errors/not-found-error';
 
 export default function validateId(
   req: Request,
